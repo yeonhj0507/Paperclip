@@ -1,4 +1,4 @@
-# About Paperclip
+# Paperclip V1.0
 
 ## 📱 Application Description
 
