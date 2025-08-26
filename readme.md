@@ -92,7 +92,7 @@ This builds the native DLL/EXE, deploys to `%LOCALAPPDATA%\PaperClip`, finalizes
 * **Visual Studio 2022** with MSVC v143 and Windows 10/11 SDK
 * **MSBuild** (installed with VS)
 * **PowerShell 5.1+**
-* (Optional) **Qualcomm AI Stack / Genie SDK / QNN SDK** for accelerated runtime DLLs
+* **Qualcomm AI Stack / Genie SDK / QNN SDK** for accelerated runtime DLLs
 
 ---
 
