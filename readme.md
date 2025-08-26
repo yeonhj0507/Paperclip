@@ -66,8 +66,6 @@ From the repo’s `scripts` folder (PowerShell):
   -ChromeExtIds "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" `
   -EdgeExtIds   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
 
-# Brave (optional): add -RegisterBrave and pass the Brave extension ID via -ChromeExtIds
-.\register_native_host.ps1 -ChromeExtIds "braveextensionidgoeshere" -RegisterBrave
 ```
 
 * You can list **multiple** IDs per browser: `-ChromeExtIds "id1","id2"`.
@@ -82,9 +80,6 @@ From a PowerShell window in the repo’s `scripts` folder:
 ```powershell
 # ARM64 Windows (e.g., Snapdragon X)
 .\install_all.ps1 -Arch arm64
-
-# x64 Windows
-.\install_all.ps1 -Arch x64
 ```
 
 This builds the native DLL/EXE, deploys to `%LOCALAPPDATA%\PaperClip`, finalizes Native Messaging registration, and runs a smoke test. Logs land in `logs\install\*.log`.
@@ -93,7 +88,7 @@ This builds the native DLL/EXE, deploys to `%LOCALAPPDATA%\PaperClip`, finalizes
 
 ## Requirements
 
-* **Windows 10/11** (ARM64 or x64)
+* **Windows 10/11** (ARM64)
 * **Visual Studio 2022** with MSVC v143 and Windows 10/11 SDK
 * **MSBuild** (installed with VS)
 * **PowerShell 5.1+**
