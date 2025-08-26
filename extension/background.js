@@ -178,3 +178,12 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
   sendResponse({ ok: false, error: 'unknown message' });
 });
+
+chrome.commands.onCommand.addListener((cmd) => {
+  // 포커스 탭에 전달해서 CS가 처리하게
+  chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+    const tabId = tabs[0]?.id;
+    if (!tabId) return;
+    chrome.tabs.sendMessage(tabId, { type: "command", command: cmd }, () => void chrome.runtime.lastError);
+  });
+});

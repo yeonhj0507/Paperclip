@@ -3,13 +3,9 @@
   "name": "PaperClip_Extension",
   "version": "1.0.1",
   "description": "Suggests polite rewrites for Gmail emails using AI.",
-  "permissions": [
-    "scripting",
-    "storage",
-    "activeTab",
-    "tabs",
-    "http://127.0.0.1/*"
-  ],
+"permissions": [
+  "scripting", "storage", "activeTab", "tabs", "nativeMessaging"
+],
   "host_permissions": [
     "https://mail.google.com/*"
   ],
@@ -18,6 +14,7 @@
   },
   "content_scripts": [
     {
+      "all_frames": true,
       "matches": ["https://mail.google.com/*"],
       "js": ["contentScript.js"],
       "run_at": "document_idle"
@@ -28,6 +25,7 @@
     "48": "icons/icon16.png",
     "128": "icons/icon16.png"
   },
+  "action": { "default_title": "PaperClip" },
   "commands": {
     "tone-check": {
       "suggested_key": { "default": "Alt+T", "mac": "Alt+T" },
