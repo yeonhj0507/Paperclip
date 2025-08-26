@@ -7,3 +7,5 @@
 *.user
 *.suo
 *.VC.db*
+/runtime/genie_bundle
+/logs
