@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "PaperClip_Extension",
+  "version": "1.0.1",
+  "description": "Suggests polite rewrites for Gmail emails using AI.",
+  "permissions": [
+    "scripting",
+    "storage",
+    "activeTab",
+    "tabs",
+    "http://127.0.0.1/*"
+  ],
+  "host_permissions": [
+    "https://mail.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon16.png",
+    "128": "icons/icon16.png"
+  },
+  "commands": {
+    "tone-check": {
+      "suggested_key": { "default": "Alt+T", "mac": "Alt+T" },
+      "description": "이메일 톤 체크 및 제안사항 보기"
+    },
+    "show-rollback": {
+      "suggested_key": { "default": "Alt+Z", "mac": "Alt+Z" },
+      "description": "변경사항 되돌리기 옵션 보기"
+    },
+    "quick-undo": {
+      "suggested_key": { "default": "Alt+Q", "mac": "Alt+Q" },
+      "description": "마지막 변경사항 빠른 되돌리기"
+    },
+    "show-help": {
+      "suggested_key": { "default": "Alt+H", "mac": "Alt+H" },
+      "description": "단축키 도움말 보기"
+    }
+  }
+}

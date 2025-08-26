@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project(igr_native_host LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(igr_host src/igr_host.cpp)
+if (WIN32)
+  target_compile_definitions(igr_host PRIVATE _WIN32_WINNT=0x0601)
+endif()

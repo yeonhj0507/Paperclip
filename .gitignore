@@ -1,0 +1,9 @@
+.vs/
+**/*.ipch
+/native/**/bin/
+/native/**/obj/
+/**/bin/
+/**/obj/
+*.user
+*.suo
+*.VC.db*
