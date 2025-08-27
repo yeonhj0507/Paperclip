@@ -18,7 +18,6 @@
       <Platform>ARM64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{F5D6E2C0-6A1B-4B5E-9F6B-0B5A1B9F1234}</ProjectGuid>
@@ -27,9 +26,7 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>PaperClipHost</ProjectName>
   </PropertyGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-
   <!-- 모든 구성에서 Application(EXE)로 빌드 -->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -38,7 +35,6 @@
     <CharacterSet>Unicode</CharacterSet>
     <LanguageStandard>stdcpp17</LanguageStandard>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -47,7 +43,6 @@
     <CharacterSet>Unicode</CharacterSet>
     <LanguageStandard>stdcpp17</LanguageStandard>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -55,7 +50,6 @@
     <CharacterSet>Unicode</CharacterSet>
     <LanguageStandard>stdcpp17</LanguageStandard>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -64,9 +58,7 @@
     <CharacterSet>Unicode</CharacterSet>
     <LanguageStandard>stdcpp17</LanguageStandard>
   </PropertyGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-
   <!-- 공통 출력/임시 폴더 및 런타임 소스 경로 지정 -->
   <PropertyGroup>
     <!-- EXE가 떨어질 위치: native\projects\bin\$(Platform)\$(Configuration)\ -->
@@ -76,7 +68,6 @@
     <!-- 런타임 복사 원본(요청한 경로): ProjectDir 위(native)의 위(PaperClip 루트)\runtime -->
     <RuntimeSourceDir>$(ProjectDir)..\..\runtime</RuntimeSourceDir>
   </PropertyGroup>
-
   <!-- Debug|x64 -->
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -91,14 +82,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-        <![CDATA[
+      <Command><![CDATA[
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='SilentlyContinue'; $src=[IO.Path]::GetFullPath('$(RuntimeSourceDir)'); $dst=[IO.Path]::GetFullPath('$(OutDir)'); if (Test-Path $src) { if (-not (Test-Path $dst)) { New-Item -ItemType Directory -Force -Path $dst | Out-Null }; Copy-Item ($src+'\*') $dst -Recurse -Force }"
-        ]]>
-      </Command>
+        ]]></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-
   <!-- Release|x64 -->
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -117,14 +105,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-        <![CDATA[
+      <Command><![CDATA[
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='SilentlyContinue'; $src=[IO.Path]::GetFullPath('$(RuntimeSourceDir)'); $dst=[IO.Path]::GetFullPath('$(OutDir)'); if (Test-Path $src) { if (-not (Test-Path $dst)) { New-Item -ItemType Directory -Force -Path $dst | Out-Null }; Copy-Item ($src+'\*') $dst -Recurse -Force }"
-        ]]>
-      </Command>
+        ]]></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-
   <!-- Debug|ARM64 -->
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile>
@@ -139,14 +124,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-        <![CDATA[
+      <Command><![CDATA[
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='SilentlyContinue'; $src=[IO.Path]::GetFullPath('$(RuntimeSourceDir)'); $dst=[IO.Path]::GetFullPath('$(OutDir)'); if (Test-Path $src) { if (-not (Test-Path $dst)) { New-Item -ItemType Directory -Force -Path $dst | Out-Null }; Copy-Item ($src+'\*') $dst -Recurse -Force }"
-        ]]>
-      </Command>
+        ]]></Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Continue'; $dst='$(OutDir)'; if(!(Test-Path $dst)){ New-Item -ItemType Directory -Force -Path $dst | Out-Null }; $srcs=@(); $rt=Join-Path '$(ProjectDir)' '..\..\runtime'; if(Test-Path $rt){ $srcs+=($rt+'\*') }; if($env:QAIRT_ROOT){ $q=$env:QAIRT_ROOT; if(Test-Path (Join-Path $q 'lib\aarch64-windows-msvc')){ $srcs+=(Join-Path $q 'lib\aarch64-windows-msvc\*') }; if(Test-Path (Join-Path $q 'lib\hexagon-v73\unsigned')){ $srcs+=(Join-Path $q 'lib\hexagon-v73\unsigned\*') } }; foreach($s in $srcs){ try{ Copy-Item $s $dst -Recurse -Force -ErrorAction Stop; Write-Host ('copied ' + $s) } catch { Write-Host ('skip   ' + $s + ' (' + $_.Exception.Message + ')') } }"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
-
   <!-- Release|ARM64 -->
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
@@ -165,17 +150,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>
-        <![CDATA[
+      <Command><![CDATA[
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='SilentlyContinue'; $src=[IO.Path]::GetFullPath('$(RuntimeSourceDir)'); $dst=[IO.Path]::GetFullPath('$(OutDir)'); if (Test-Path $src) { if (-not (Test-Path $dst)) { New-Item -ItemType Directory -Force -Path $dst | Out-Null }; Copy-Item ($src+'\*') $dst -Recurse -Force }"
-        ]]>
-      </Command>
+        ]]></Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-
   <ItemGroup>
     <ClCompile Include="..\src\PaperClipHost.cpp" />
   </ItemGroup>
-
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

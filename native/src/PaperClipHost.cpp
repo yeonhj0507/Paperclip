@@ -274,6 +274,20 @@ static void write_diag(std::string path, size_t in_len, size_t out_len, std::str
     write_msg(msg);
 }
 
+
+#ifdef _WIN32
+static void log_last_err(const char* where) {
+    DWORD e = GetLastError();
+    LPWSTR msg = nullptr;
+    FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        nullptr, e, 0, (LPWSTR)&msg, 0, nullptr);
+    std::string s = w_to_utf8(msg ? msg : L"");
+    if (msg) LocalFree(msg);
+    write_diag("dll", 0, 0, std::string(where) + " GLE=" + std::to_string(e) + " " + s);
+}
+#endif
+
+
 static void try_load_lib() {
     if (g_lib) return;
 
@@ -282,6 +296,7 @@ static void try_load_lib() {
     if (getenv_s(&n, dll_env, "PC_SUGGESTION_DLL") == 0 && n > 0) {
         g_lib = ::LoadLibraryW(utf8_to_w(dll_env).c_str());
         write_diag("dll", 0, 0, std::string("LoadLibrary env ") + (g_lib ? "OK: " : "FAIL: ") + dll_env);
+        if (!g_lib) log_last_err("LoadLibrary env");   //  add
     }
 
     // (2) exe dir fallback
@@ -289,6 +304,10 @@ static void try_load_lib() {
         std::string path = exe_dir_utf8() + "\\PaperClipNative.dll";
         g_lib = ::LoadLibraryW(utf8_to_w(path).c_str());
         write_diag("dll", 0, 0, std::string("LoadLibrary exe ") + (g_lib ? "OK: " : "FAIL: ") + path);
+        if (!g_lib) {                                  //  add
+            log_last_err("LoadLibrary exe");
+            return; // remain
+        }
     }
     if (!g_lib) return;
 
@@ -339,7 +358,7 @@ static void try_load_lib() {
         }
     }
 
-    // 🔕 warmup 완전 제거 (로그로 명시만)
+    //  warmup 완전 제거 (로그로 명시만)
     write_diag("dll", 0, 0, "warmup-skipped");
 
     // === extra probe after set_base / set_config ===
@@ -353,6 +372,11 @@ static void try_load_lib() {
     std::string bundle = base + "\\genie_bundle";
     write_diag("probe", 0, 0, std::string("bundle_path=") + bundle +
         (fs::exists(bundle) ? " (exists)" : " (MISSING)"));
+
+    if (!SetDllDirectoryW(utf8_to_w(bundle).c_str())) {
+        log_last_err("SetDllDirectory(bundle)");
+    }
+    write_diag("probe", 0, 0, "SetDllDirectory(bundle) set");
 
     std::string cfg = "";
     {
@@ -378,6 +402,7 @@ static void try_load_lib() {
     if (!hGenie) {
         DWORD err = GetLastError();
         write_diag("probe", 0, 0, std::string("LoadLibrary Genie.dll FAILED, GLE=") + std::to_string(err));
+        log_last_err("LoadLibrary Genie.dll"); // add
     }
     else {
         write_diag("probe", 0, 0, "LoadLibrary Genie.dll OK (probe)");

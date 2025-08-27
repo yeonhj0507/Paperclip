@@ -1,5 +1,5 @@
 // background.js — MV3 Native Messaging (emailContent/analyze 둘 다 지원)
-const HOST_NAME = 'com.igr.host';
+const HOST_NAME = 'com.paperclip.host.chrome';
 let port = null;
 let pingTimer = null;
 

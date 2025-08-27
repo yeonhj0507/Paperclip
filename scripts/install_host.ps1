@@ -7,7 +7,7 @@ Start-InstallLog -Name "install_host"
 
 try {
     $repo      = Get-RepoRoot
-    $install   = Join-Path $env:LOCALAPPDATA 'IGR'
+    $install   = Join-Path $env:LOCALAPPDATA 'PaperClip'
     $bundleSrc = Join-Path $repo 'runtime\genie_bundle'
     $cfgSrc    = Join-Path $repo 'runtime\genie_config.json'
     $binDir    = Join-Path $repo "native\projects\bin\$Arch\Release"
