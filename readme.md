@@ -160,3 +160,4 @@ No third-party libraries are used. The extension relies solely on standard web t
 ## 📄 License
 
 This project is licensed under the [MIT License](./LICENSE) by Paperclip Team.
+(Contacts: Euntaek Jeong(Team Leader), E-mail: 05temtxi21@gmail.com)
